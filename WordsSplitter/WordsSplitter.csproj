@@ -43,6 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOControls\ConsoleInputParser.cs" />
+    <Compile Include="IOControls\ConsoleOutputWriter.cs" />
+    <Compile Include="IOControls\FileInputParser.cs" />
+    <Compile Include="Interfaces\IInputParser.cs" />
+    <Compile Include="IOControls\FileOutputWriter.cs" />
+    <Compile Include="IOControls\IOFactory.cs" />
+    <Compile Include="Interfaces\IOutputProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

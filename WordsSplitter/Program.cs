@@ -1,65 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
 namespace WordsSplitter
 {
+    public enum IOType
+    {
+        File,
+        Console
+    }
+
     class Program
     {
+        private static IOType input = IOType.File;
+        private static IOType output = IOType.File;
+
         static void Main(string[] args)
-        {
-            const string inputFilePath = "Input.txt";
-            const string outputFilePath = "Output.txt";
-
-            var started = DateTime.Now;
-
+        { 
             Dictionary<string, HashSet<int>> words = new Dictionary<string, HashSet<int>>(StringComparer.Ordinal);
 
-            char[] separators = new[] {',', ' ', '.', ':',';', ')', '(', '?', '!', '{', '}', '\\', '/', '"', '~', '\t', '[', ']', '-', '#', '*', '&', '%', '\'', '$', '<', '>', '+', '=' };
+            var ioFactory = new IOFactory();
+            List<string> lines = GetInputLines(ioFactory);
 
-            if (!File.Exists(inputFilePath))
-            {
-                Console.WriteLine("Input file not found! Path: {0}", inputFilePath);
-            }
-            else
-            {
-                using (StreamReader sr = new StreamReader(File.OpenRead(inputFilePath)))
-                {
-                    int lineCount = 0;
-                    while (sr.EndOfStream == false)
-                    {
-                        string line = sr.ReadLine();
-                        if (line == null) continue;
-                        lineCount++;
-                        //string[] lineWords = line.ToLowerInvariant().Split(separators, StringSplitOptions.RemoveEmptyEntries);
-                        string[] lineWords = Regex.Split(line.ToLower(), @"[^A-Za-z0-9]+");
+            var started = DateTime.Now;
+            FillWordsChart(lines, words);
+            Console.WriteLine("\nWords parsing finished in {0} ms\n\n", (DateTime.Now - started).TotalMilliseconds);
 
-                        foreach (string word in lineWords)
-                        {
-                            if (string.IsNullOrEmpty(word))
-                                continue;
-
-                            if (!words.ContainsKey(word))
-                            {
-                                words.Add(word, new HashSet<int>());
-                            }
-                            words[word].Add(lineCount);
-                        }
-                    }
-                }
-            }
-
-            File.WriteAllLines(outputFilePath, words.OrderBy(i => i.Key).Select(s => $"{s.Key}: {string.Join(" ", s.Value)}\n"), Encoding.Unicode);
-
-            Console.WriteLine("Finished in {0} ms", (DateTime.Now - started).TotalMilliseconds);
+            OutputResults(ioFactory, words);
 
             Console.WriteLine("\n\nPress any key to quit...");
             Console.ReadKey();
+        }
+
+        private static List<string> GetInputLines(IOFactory factory)
+        {
+            return factory.GetInputParser(input).GetData();
+        }
+
+        private static void FillWordsChart(List<string> lines, Dictionary<string, HashSet<int>> wordsChart)
+        {
+            //char[] separators = new[] { ',', ' ', '.', ':', ';', ')', '(', '?', '!', '{', '}', '\\', '/', '"', '~', '\t', '[', ']', '-', '#', '*', '&', '%', '\'', '$', '<', '>', '+', '=' };
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                string line = lines[i];
+
+                //string[] lineWords = line.ToLowerInvariant().Split(separators, StringSplitOptions.RemoveEmptyEntries);
+                string[] lineWords = Regex.Split(line.ToLower(), @"[^A-Za-z0-9]+");
+
+                foreach (string word in lineWords)
+                {
+                    if (string.IsNullOrEmpty(word))
+                        continue;
+
+                    if (!wordsChart.ContainsKey(word))
+                    {
+                        wordsChart.Add(word, new HashSet<int>());
+                    }
+                    wordsChart[word].Add(i);
+                }
+            }
+        }
+
+        private static void OutputResults(IOFactory factory, Dictionary<string, HashSet<int>> data)
+        {
+            factory.GetOutputProvider(output).OutputData(data);
         }
     }
 }
