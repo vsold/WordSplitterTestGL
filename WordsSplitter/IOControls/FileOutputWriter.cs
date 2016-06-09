@@ -13,7 +13,7 @@ namespace WordsSplitter
         {
             Console.WriteLine("\nWriting results in {0}\n", outputFilePath);
             File.WriteAllLines(outputFilePath, 
-                data.OrderBy(i => i.Key).Select(s => $"{s.Key}: {string.Join(" ", s.Value)}\n"), 
+                data.OrderBy(i => i.Key).Select(s => string.Format("{0}: {1}\n", s.Key, string.Join(" ", s.Value))), 
                 Encoding.Unicode);
         }
     }
