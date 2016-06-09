@@ -38,14 +38,14 @@ namespace WordsSplitter
 
         private static void FillWordsChart(List<string> lines, Dictionary<string, HashSet<int>> wordsChart)
         {
-            //char[] separators = new[] { ',', ' ', '.', ':', ';', ')', '(', '?', '!', '{', '}', '\\', '/', '"', '~', '\t', '[', ']', '-', '#', '*', '&', '%', '\'', '$', '<', '>', '+', '=' };
+            char[] separators = new[] { ',', ' ', '.', ':', ';', ')', '(', '?', '!', '{', '}', '\\', '/', '"', '~', '\t', '[', ']', '-', '#', '*', '&', '%', '\'', '$', '<', '>', '+', '=' };
 
             for (int i = 0; i < lines.Count; i++)
             {
                 string line = lines[i];
 
-                //string[] lineWords = line.ToLowerInvariant().Split(separators, StringSplitOptions.RemoveEmptyEntries);
-                string[] lineWords = Regex.Split(line.ToLower(), @"[^A-Za-z0-9]+");
+                string[] lineWords = line.ToLowerInvariant().Split(separators, StringSplitOptions.RemoveEmptyEntries);
+                //string[] lineWords = Regex.Split(line.ToLower(), @"[^A-Za-z0-9]+");
 
                 foreach (string word in lineWords)
                 {
