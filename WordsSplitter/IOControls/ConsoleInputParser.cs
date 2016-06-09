@@ -5,7 +5,7 @@ namespace WordsSplitter
 {
     class ConsoleInputParser: IInputParser
     {
-        public List<string> GetData()
+        public List<string> GetData(string path="")
         {
             List<string> lines = new List<string>();
 

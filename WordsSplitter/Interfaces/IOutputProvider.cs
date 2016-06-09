@@ -4,6 +4,6 @@ namespace WordsSplitter
 {
     interface IOutputProvider
     {
-       void OutputData(Dictionary<string, HashSet<int>> data);
+       void OutputData(Dictionary<string, HashSet<int>> data, string path = "");
     }
 }

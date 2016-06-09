@@ -8,7 +8,7 @@ namespace WordsSplitter
 {
     class ConsoleOutputWriter: IOutputProvider
     {
-        public void OutputData(Dictionary<string, HashSet<int>> data)
+        public void OutputData(Dictionary<string, HashSet<int>> data, string path = "")
         {
             foreach (var word in data.OrderBy(i => i.Key))
             {

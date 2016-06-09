@@ -4,6 +4,6 @@ namespace WordsSplitter
 {
     interface IInputParser
     {
-        List<string> GetData();
+        List<string> GetData(string path = "");
     }
 }
